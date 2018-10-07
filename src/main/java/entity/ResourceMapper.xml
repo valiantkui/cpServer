@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<!-- namespace映射文件的namespace必须等于Mapper映射器的全限定名 -->
+<mapper namespace="dao.ResourceDao">
+	
+	<select id="findResourceByType" resultType="entity.Resource" parameterType="String">
+		select * from resource where type=#{type}
+	</select>	
+	<insert id="addResource" parameterType="entity.Resource">
+		insert into resource(title,intro,type,path,update_date) 
+		values(#{title},#{intro},#{type},#{path},#{update_date})
+	</insert>
+	
+	<select id="findResourceByR_no" resultType="entity.Resource" parameterType="int">
+		select * from resource where r_no = #{r_no}
+	</select>
+	
+	<update id="updateResource" parameterType="entity.Resource">
+		update resource set title=#{title},intro=#{intro},path=#{path},update_date=#{update_date}
+			where r_no = #{r_no}
+	</update>
+	
+	<delete id="deleteResourceByR_no" parameterType="int">
+		delete from resource where r_no = #{r_no}	
+	
+	</delete>
+	
+	<select id="searchResource" resultType="entity.Resource" parameterType="String">
+		select * from resource 
+		where title like concat(concat('%',#{searchContent),'%')
+		or intro like concat(concat('%',#{searchContent),'%')
+	</select>
+</mapper>
+
+
+
+
+
+
+

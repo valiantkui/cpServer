@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd 
+                        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd 
+                        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd ">
+
+
+	<!--启动注解驱动  -->
+	<mvc:annotation-driven/>
+	<mvc:resources mapping="/img/**" location="/img/"/>
+	<mvc:resources mapping="/js/**" location="/js/"/>
+	<mvc:resources mapping="/css/**" location="/css/"/>
+	<!-- <mvc:annotation-driven >  
+        消息转换器  (想要实现解决中文乱码，但是结果令人遗憾，不推荐使用)
+        <mvc:message-converters register-defaults="true">  
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">  
+                <property name="supportedMediaTypes" value="application/json;charset=UTF-8"/>  
+            </bean>  
+        </mvc:message-converters>  
+    </mvc:annotation-driven>   -->
+   
+	
+	<!-- 组件扫描(如果有多个包，包名之间用逗号分隔开) -->
+	<context:component-scan base-package="dao,controller"></context:component-scan>
+	
+	<util:properties id="config" location="classpath:DB.properties"></util:properties>
+
+	<!-- 配置连接池 -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="#{config.driverClassName}"/>
+		<property name="url" value="#{config.url}"/>
+		<property name="username" value="#{config.username}"/>
+		<property name="password" value="#{config.password}"/>
+	</bean>
+	
+	
+	
+	<bean id="ssfb" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="mapperLocations" value="classpath:entity/*.xml"></property>
+	</bean>
+	
+	
+	<!--  
+		MapperScannerConfigurer负责扫描指定包下面的所有的Mapper映射器(接口)，
+		然后生成符合这些映射器要求的对象
+		（其实，就是调用SqlSession的getMapper方法）。
+		另外，还会将这些对象添加到spring容器里面、
+		(默认的id是首字母小写之后的接口名，也可以使用@Repository()注解配置bean)。
+	-->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+	<!--Mapper映射器所在的包  -->
+		<property name="basePackage" value="dao"/>
+		<!--只扫描特定的包  -->
+	</bean>
+	
+
+</beans>

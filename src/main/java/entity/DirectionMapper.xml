@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<!-- namespace映射文件的namespace必须等于Mapper映射器的全限定名 -->
+<mapper namespace="dao.DirectionDao">
+	
+	<select id="findMasterDirections" resultType="entity.Direction" >
+		select * from direction where type='考研'
+	</select>	
+	<select id="findJobDirections" resultType="entity.Direction" >
+		select * from direction where type='就业'
+	</select>	
+	<select id="findMasterDirectionByD_no" resultType="entity.Direction" parameterType="String">
+		select * from direction where type='考研' and d_no = #{d_no}
+	</select>	
+	<select id="findJobDirectionByD_no" resultType="entity.Direction" parameterType="String">
+		select * from direction where type='就业' and d_no = #{d_no}
+	</select>	
+	<select id="findDirectionByD_no" resultType="entity.Direction" parameterType="String">
+		select * from direction where  d_no = #{d_no}
+	</select>	
+	<select id="findDirectionByS_no" resultType="entity.Direction" parameterType="String">
+		select distinct d.d_no,d.name,d.type,d.intro_link,d.vista_link,d.update_date from direction d,d_s
+		where d.d_no = d_s.d_no
+		and d_s.s_no = #{s_no}
+		
+	</select>
+	<select id="searchDirection" resultType="entity.Direction" parameterType="String">
+		select * from direction 
+		where  name like concat(concat('%',#{searchContent}),'%')
+		or type like concat(concat('%',#{searchContent}),'%')
+	</select>
+</mapper>
+
+
+
+
+
+
+

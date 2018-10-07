@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<!-- namespace映射文件的namespace必须等于Mapper映射器的全限定名 -->
+<mapper namespace="dao.ArticleDao">
+
+
+	<delete id="deleteArticleByA_no" parameterType="String">
+		delete from article where a_no = #{a_no}
+	</delete>
+	
+	<insert id="addArticle"  parameterType="entity.Article" useGeneratedKeys="true" keyProperty="a_no">
+		insert into article(title,intro,content_link,type,status,update_date) 
+		values(#{title}, #{intro}, #{content_link}, #{type}, #{status}, #{update_date});
+	</insert>	
+	
+	<select id="findArticleByContent_link" resultType="entity.Article"  parameterType="String">
+	`	select a_no,title,intro,content_link,type,status,update_date from article
+		where content_link = #{content_link}
+		order by a_no
+		limit 0,1
+	
+	</select>
+	
+	<select id="findArticleByS_no" resultType="entity.Article" parameterType="String">
+	
+		select distinct article.a_no,title,intro,content_link,type,status,update_date from article,a_s_u
+		where article.a_no = a_s_u.a_no
+		and s_no = #{s_no}
+	
+	</select>
+	
+	<select id="findArticleByU_id" resultType="entity.Article" parameterType="String">
+		<!-- select distinct article.a_no,title,intro,content_link,type,status,update_date from article ,a_s_u
+		where article.a_no = a_s_u.a_no
+		and u_id = #{u_id} -->
+		
+		select a_no,title,intro,content_link,type,status,update_date from article
+		where content_link like concat(#{u_id},'//%')
+	
+	</select>
+	<select id="searchArticle" resultType="entity.Article" parameterType="String">
+		
+		
+		select a_no,title,intro,content_link,type,status,update_date from article
+		where title like concat(concat('%',#{searchContent}),'%')
+		or intro like concat(concat('%',#{searchContent}),'%')
+	
+	</select>
+</mapper>
+
+
+
+
+
+
+

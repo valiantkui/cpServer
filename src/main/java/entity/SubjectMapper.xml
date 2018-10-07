@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<!-- namespace映射文件的namespace必须等于Mapper映射器的全限定名 -->
+<mapper namespace="dao.SubjectDao">
+	
+	
+	
+	<select id="findAll" resultType="entity.Subject">
+		select * from subject
+	</select>
+	
+	<select id="findSubjectByP_no" parameterType="String" resultType="entity.Subject">
+		select subject.s_no,name,type,intro,image_address from subject,p_s 
+		where subject.s_no = p_s.s_no 
+		and p_no = #{p_no}
+	</select>	
+	
+	<select id="findSubjectByS_no" parameterType="String" resultType="entity.Subject">
+		select s_no,name,type,intro,image_address from subject
+		where s_no = #{s_no} 
+	</select>	
+	<select id="searchSubject" parameterType="String" resultType="entity.Subject">
+		select s_no,name,type,intro,image_address from subject
+		where name like concat(concat('%',#{searchContent}),'%' )
+	</select>	
+</mapper>
+
+
+
+
+
+
+
